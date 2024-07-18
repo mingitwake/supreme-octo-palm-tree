@@ -1,0 +1,10 @@
+flask
+redis
+requests
+bs4
+beautifulsoup4
+chromadb
+langchain-core
+langchain-text-splitters
+langchain-openai
+langchain-community
