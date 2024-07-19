@@ -1,4 +1,5 @@
 flask
+flask_restful
 redis
 requests
 bs4
