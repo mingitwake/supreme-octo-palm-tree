@@ -3,6 +3,8 @@ python -m venv .venv
 
 # Activate virtual environment
 # Windows
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted
+
 ./.venv/scripts/activate
 set FLASK_ENV=development
 
@@ -31,6 +33,6 @@ composer create-project --prefer-dist laravel/laravel laravel-app
 cd laravel-app
 npm -v
 npm install axios
+php artisan install:api
 composer require guzzlehttp/guzzle
-php artisan make:controller ChatController
-php artisan make:controller UploadController
+php artisan make:controller Controller

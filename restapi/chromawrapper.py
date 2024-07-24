@@ -1,4 +1,4 @@
-import chromadb
+import os, chromadb
 from langchain_core.documents import Document
 from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
 from langchain_chroma import Chroma
@@ -7,13 +7,22 @@ from langchain_core.prompts import HumanMessagePromptTemplate, ChatPromptTemplat
 from chromadb.config import DEFAULT_TENANT, DEFAULT_DATABASE, Settings
 
 # Configuration
-from configurations import ( 
-    MODEL_DEPLOYMENT, 
-    EMBEDDING_DEPLOYMENT,
-    API_KEY,
-    API_VERSION,
-    AZURE_ENDPOINT, 
-    )
+# from configurations import ( 
+#     MODEL_DEPLOYMENT, 
+#     EMBEDDING_DEPLOYMENT,
+#     API_KEY,
+#     API_VERSION,
+#     AZURE_ENDPOINT, 
+#     )
+
+from dotenv import load_dotenv, dotenv_values 
+load_dotenv() 
+
+MODEL_DEPLOYMENT=os.getenv("MODEL_DEPLOYMENT")
+EMBEDDING_DEPLOYMENT=os.getenv("EMBEDDING_DEPLOYMENT")
+API_KEY=os.getenv("API_KEY")
+API_VERSION=os.getenv("API_VERSION")
+AZURE_ENDPOINT=os.getenv("AZURE_ENDPOINT")
 
 # Azure OpenAI Model Configuration
 MODEL = AzureChatOpenAI(

@@ -21,17 +21,16 @@ class Upload(Resource):
             collection = "default"
         try:
             documentList = read_urls(urls=[document])
-            result = write(collection_name=collection, documents=documentList)
-            return jsonify({'message': result})
+            write(collection_name=collection, documents=documentList)
+            return jsonify({'message': '0'})
         except Exception:
-            return jsonify({'error': 1}), 500
+            return jsonify({'error': '1'}), 500
     
 class Chat(Resource):
 
     def post(self):
         data = request.json
         query = data.get('query')
-        # sysname = data.get('sysname')
         if not query:
             return jsonify({'error': 'No query provided'}), 400
         collection = data.get('collection')
@@ -41,7 +40,7 @@ class Chat(Resource):
             result = read(collection_name=collection, query=query)
             return jsonify({'message': result})
         except Exception:
-            return jsonify({'error': 1}), 500
+            return jsonify({'error': '1'}), 500
     
 class Clean(Resource): 
 
@@ -54,7 +53,7 @@ class Clean(Resource):
             result = clean(collection_name=collection)
             return jsonify({'message': result})
         except Exception:
-            return jsonify({'error': 1}), 500
+            return jsonify({'error': '1'}), 500
 
 # adding the defined resources along with their corresponding urls 
 api.add_resource(Upload, '/upload') 
