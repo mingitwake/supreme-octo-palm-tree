@@ -13,8 +13,8 @@
 
 #### Resources
 
- - [https://www.geeksforgeeks.org/how-to-install-php-in-windows-10/]
- - [https://getcomposer.org/download/]
+ - <https://www.geeksforgeeks.org/how-to-install-php-in-windows-10/>
+ - <https://getcomposer.org/download/>
 
 extensions fileinfo, gettext, mysqli, pdo_mysql, zip, openssl are required<br>
 uncomment the according lines in php.ini and check the .dll files in /ext if required<br>
@@ -41,8 +41,8 @@ if php.ini is not found, rename php.ini-development to php.ini<br>
 >
 > ``docker compose up``
 
-[http://localhost:8000/api/v1]<br>
-[http://localhost:8000/api/v1/collections]<br>
+<http://localhost:8000/api/v1>  
+<http://localhost:8000/api/v1/collections>  
 
 #### Run and Test Python Service
 
@@ -56,7 +56,7 @@ if php.ini is not found, rename php.ini-development to php.ini<br>
 >
 > ``php artisan serve --port 8080``
 
-[http://localhost:8080]<br>
+<http://localhost:8080>  
 
 #### Resources
 
