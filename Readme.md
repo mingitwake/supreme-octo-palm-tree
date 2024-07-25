@@ -2,7 +2,7 @@
 
 #### Prerequisite
 
- - python ^3.1
+ - python ^3.7
  - php ^7.2
  - composer
  - git
@@ -15,11 +15,14 @@
 
  - <https://www.geeksforgeeks.org/how-to-install-php-in-windows-10/>
  - <https://getcomposer.org/download/>
+ - <https://windows.php.net/download/>
 
-extensions fileinfo, gettext, mysqli, pdo_mysql, zip, openssl are required<br>
-uncomment the according lines in php.ini and check the .dll files in /ext if required<br>
-uncomment ';extension_dir = "ext"' in php.ini if required<br>
-if php.ini is not found, rename php.ini-development to php.ini<br>
+#### Configuring PHP
+
+extensions fileinfo, gettext, mysqli, pdo_mysql, zip, openssl are required  
+uncomment the according lines in php.ini and check the .dll files in /ext if required  
+uncomment ';extension_dir = "ext"' in php.ini if required  
+if php.ini is not found, rename php.ini-development to php.ini  
 
 #### Create virtual environment
 
@@ -41,8 +44,7 @@ if php.ini is not found, rename php.ini-development to php.ini<br>
 >
 > ``docker compose up``
 
-<http://localhost:8000/api/v1>  
-<http://localhost:8000/api/v1/collections>  
+check if the server is running on <http://localhost:8000/api/v1> or <http://localhost:8000/api/v1/collections>  
 
 #### Run and Test Python Service
 
@@ -56,9 +58,11 @@ if php.ini is not found, rename php.ini-development to php.ini<br>
 >
 > ``php artisan serve --port 8080``
 
-<http://localhost:8080>  
+check if laravel is running on <http://localhost:8080>  
 
 #### Resources
+
+if path misconfiguration occurs, create a laravel project and move the files into the project.
 
 > ``composer create-project --prefer-dist laravel/laravel laravel-project``
 >
@@ -72,5 +76,14 @@ if php.ini is not found, rename php.ini-development to php.ini<br>
 >
 > ``composer require guzzlehttp/guzzle``
 >
-> ``php artisan make:controller Controller``
+> ``php artisan make:controller <Controller>``
+>
+>
 
+directories and files that require modification
+- .env
+- app/Http/
+- app/Models/
+- database/migrations/
+- resources/views/
+- routes/web.php
