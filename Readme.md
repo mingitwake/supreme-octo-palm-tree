@@ -1,4 +1,4 @@
-### Readme
+### Readme.md
 
 #### Prerequisite
 
@@ -13,8 +13,8 @@
 
 #### Resources
 
- - https://www.geeksforgeeks.org/how-to-install-php-in-windows-10/
- - https://getcomposer.org/download/
+ - [https://www.geeksforgeeks.org/how-to-install-php-in-windows-10/]
+ - [https://getcomposer.org/download/]
 
 extensions fileinfo, gettext, mysqli, pdo_mysql, zip, openssl are required
 uncomment the according lines in php.ini and check the .dll files in /ext if required
@@ -40,6 +40,7 @@ if php.ini is not found, rename php.ini-development to php.ini
 > ``cd ./chroma``
 >
 > ``docker compose up``
+
 [http://localhost:8000/api/v1]
 [http://localhost:8000/api/v1/collections]
 
@@ -54,6 +55,7 @@ if php.ini is not found, rename php.ini-development to php.ini
 > ``cd ./laravel-project``
 >
 > ``php artisan serve --port 8080``
+
 [http://localhost:8080]
 
 #### Resources
@@ -71,3 +73,4 @@ if php.ini is not found, rename php.ini-development to php.ini
 > ``composer require guzzlehttp/guzzle``
 >
 > ``php artisan make:controller Controller``
+
