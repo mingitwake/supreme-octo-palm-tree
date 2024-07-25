@@ -16,10 +16,10 @@
  - [https://www.geeksforgeeks.org/how-to-install-php-in-windows-10/]
  - [https://getcomposer.org/download/]
 
-extensions fileinfo, gettext, mysqli, pdo_mysql, zip, openssl are required
-uncomment the according lines in php.ini and check the .dll files in /ext if required
-uncomment ';extension_dir = "ext"' in php.ini if required
-if php.ini is not found, rename php.ini-development to php.ini
+extensions fileinfo, gettext, mysqli, pdo_mysql, zip, openssl are required<br>
+uncomment the according lines in php.ini and check the .dll files in /ext if required<br>
+uncomment ';extension_dir = "ext"' in php.ini if required<br>
+if php.ini is not found, rename php.ini-development to php.ini<br>
 
 #### Create virtual environment
 
@@ -41,8 +41,8 @@ if php.ini is not found, rename php.ini-development to php.ini
 >
 > ``docker compose up``
 
-[http://localhost:8000/api/v1]
-[http://localhost:8000/api/v1/collections]
+[http://localhost:8000/api/v1]<br>
+[http://localhost:8000/api/v1/collections]<br>
 
 #### Run and Test Python Service
 
@@ -56,7 +56,7 @@ if php.ini is not found, rename php.ini-development to php.ini
 >
 > ``php artisan serve --port 8080``
 
-[http://localhost:8080]
+[http://localhost:8080]<br>
 
 #### Resources
 
