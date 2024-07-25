@@ -28,6 +28,7 @@ if php.ini is not found, rename php.ini-development to php.ini
 #### Activate virtual environment (Windows)
 
 > ``Set-ExecutionPolicy -ExecutionPolicy Unrestricted``
+>
 > ``./.venv/scripts/activate``
 
 #### Install packages
@@ -37,6 +38,7 @@ if php.ini is not found, rename php.ini-development to php.ini
 #### Run Chroma Server
 
 > ``cd ./chroma``
+>
 > ``docker compose up``
 [http://localhost:8000/api/v1]
 [http://localhost:8000/api/v1/collections]
@@ -44,20 +46,28 @@ if php.ini is not found, rename php.ini-development to php.ini
 #### Run and Test Python Service
 
 > ``python ./restapi/app.py``
+>
 > ``curl -X POST -H "Content-Type: application/json" --json "{\"query\":\"Hi\"}" http://localhost:5000/chat``
 
 #### Run Laravel
 
 > ``cd ./laravel-project``
+>
 > ``php artisan serve --port 8080``
 [http://localhost:8080]
 
 #### Resources
 
 > ``composer create-project --prefer-dist laravel/laravel laravel-project``
+>
 > ``cd laravel-project``
+>
 > ``npm -v``
+>
 > ``npm install axios``
+>
 > ``php artisan install:api``
+>
 > ``composer require guzzlehttp/guzzle``
+>
 > ``php artisan make:controller Controller``
