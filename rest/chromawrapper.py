@@ -102,6 +102,6 @@ def read(collection_name, query, embedding=EMBEDDING, model=MODEL, prompt=PROMPT
     reader.setup_retriever()
     return(reader.get_response(query=query))
 
-def clean(collection_name, embedding=EMBEDDING):
+def clear(collection_name, embedding=EMBEDDING):
     cleaner = ChromaWrapper(collection_name, embedding)
     cleaner.clean()

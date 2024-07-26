@@ -16,9 +16,9 @@ Route::apiResource('documents', DocumentController::class);
 
 Route::middleware('api')->group(function () {
 
-    Route::post('/rest/create', function () {
+    Route::post('/service/collection', function () {
         try {
-            $response = Http::post('http://localhost:5000/create', request());
+            $response = Http::post('http://localhost:5000/', request());
             if ($response->failed()) {
                 return response()->json(['error' => 'Failed to create collection'], 500);
             }
@@ -28,19 +28,19 @@ Route::middleware('api')->group(function () {
         }
     });
 
-    Route::post('/rest/write', function () {
+    Route::put('/service/collection', function () {
         try {
-            $response = Http::post('http://localhost:5000/write', request());
+            $response = Http::put('http://localhost:5000/', request());
             if ($response->failed()) {
-                return response()->json(['error' => 'Failed to write document'], 500);
+                return response()->json(['error' => 'Failed to write to collection'], 500);
             }
             return $response->json();
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error occurred while writing document'], 500);
+            return response()->json(['error' => 'Error occurred while writing to collection'], 500);
         }
     });
 
-    Route::post('/rest/chat', function () {
+    Route::post('/service/chat', function () {
         try {
             $response = Http::post('http://localhost:5000/chat', request());
             if ($response->failed()) {
@@ -52,15 +52,15 @@ Route::middleware('api')->group(function () {
         }
     });
 
-    Route::post('/rest/delete', function () {
+    Route::delete('/service/collection', function () {
         try {
-            $response = Http::post('http://localhost:5000/delete', request());
+            $response = Http::delete('http://localhost:5000/', request());
             if ($response->failed()) {
-                return response()->json(['error' => 'Failed to clean collection'], 500);
+                return response()->json(['error' => 'Failed to clear collection'], 500);
             }
             return $response->json();
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error occurred while cleaning collection'], 500);
+            return response()->json(['error' => 'Error occurred while clearing collection'], 500);
         }
     });
 

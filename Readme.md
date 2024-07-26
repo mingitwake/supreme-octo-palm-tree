@@ -49,7 +49,7 @@ check if the server is running on <http://localhost:8000/api/v1> or <http://loca
 
 #### Run and Test Python Service
 
-> ``python ./restapi/app.py``
+> ``uvicorn main:app --port 5000 --reload``
 >
 > ``curl -X <Method> -H "Content-Type: application/json" --json "{\"<key>\":\"<value>\"}" http://localhost:5000/<route>``
 
