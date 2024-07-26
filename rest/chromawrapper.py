@@ -6,15 +6,6 @@ from langchain_core.messages import SystemMessage
 from langchain_core.prompts import HumanMessagePromptTemplate, ChatPromptTemplate
 from chromadb.config import DEFAULT_TENANT, DEFAULT_DATABASE, Settings
 
-# Configuration
-# from configurations import ( 
-#     MODEL_DEPLOYMENT, 
-#     EMBEDDING_DEPLOYMENT,
-#     API_KEY,
-#     API_VERSION,
-#     AZURE_ENDPOINT, 
-#     )
-
 from dotenv import load_dotenv, dotenv_values 
 load_dotenv() 
 
@@ -96,9 +87,13 @@ class ChromaWrapper:
     def clean(self):
         self.client.delete_collection(self.collection_name)
         
+def create(collection_name, embedding=EMBEDDING):
+    creater = ChromaWrapper(embedding=embedding, collection_name=collection_name)
+    creater.create_index()
+
 def write(collection_name, documents, embedding=EMBEDDING):
     writer = ChromaWrapper(embedding=embedding, collection_name=collection_name)
-    writer.create_index()
+    writer.get_index()
     writer.add_documents(documents=documents)
         
 def read(collection_name, query, embedding=EMBEDDING, model=MODEL, prompt=PROMPT):

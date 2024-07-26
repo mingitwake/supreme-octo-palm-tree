@@ -1,5 +1,4 @@
-flask
-flask_restful
+fastapi
 redis
 requests
 bs4
@@ -9,3 +8,4 @@ langchain-core
 langchain-text-splitters
 langchain-openai
 langchain-community
+uvicorn

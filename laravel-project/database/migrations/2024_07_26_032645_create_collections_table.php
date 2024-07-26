@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->integer('uid', true);
-            $table->string('sysname', 25);
-            $table->integer('role');
+        Schema::create('collections', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name')->default('New Chat');
+            $table->string('status')->default('active');
+            $table->timestamps();
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('collections');
     }
 };

@@ -7,6 +7,7 @@
  - composer
  - git
  - 7zip
+ - xampp [recommended]
  - docker [recommended]
  - helm [recommended]
  - nodejs [recommended]
@@ -19,7 +20,7 @@
 
 #### Configuring PHP
 
-extensions fileinfo, gettext, mysqli, pdo_mysql, zip, openssl are required  
+extensions fileinfo, gettext, mysqli, pdo_mysql, zip, sodium, openssl are required  
 uncomment the according lines in php.ini and check the .dll files in /ext if required  
 uncomment ';extension_dir = "ext"' in php.ini if required  
 if php.ini is not found, rename php.ini-development to php.ini  
@@ -50,17 +51,19 @@ check if the server is running on <http://localhost:8000/api/v1> or <http://loca
 
 > ``python ./restapi/app.py``
 >
-> ``curl -X POST -H "Content-Type: application/json" --json "{\"query\":\"Hi\"}" http://localhost:5000/chat``
+> ``curl -X <Method> -H "Content-Type: application/json" --json "{\"<key>\":\"<value>\"}" http://localhost:5000/<route>``
 
 #### Run Laravel
 
 > ``cd ./laravel-project``
 >
+> ``php artisan route:list --path=api``
+>
 > ``php artisan serve --port 8080``
 
 check if laravel is running on <http://localhost:8080>  
 
-#### Resources
+#### Configurating Laravel
 
 if path misconfiguration occurs, create a laravel project and move the files into the project.
 
@@ -68,17 +71,13 @@ if path misconfiguration occurs, create a laravel project and move the files int
 >
 > ``cd laravel-project``
 >
-> ``npm -v``
->
-> ``npm install axios``
->
-> ``php artisan install:api``
+> ``php artisan install:api --passport``
 >
 > ``composer require guzzlehttp/guzzle``
 >
-> ``php artisan make:controller <Controller>``
+> ``php artisan make:controller <Controller> --resource``
 >
->
+> ``php artisan migrate``
 
 directories and files that require modification
 - .env

@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
-class Chat extends Model
+class Collection extends Model
 {
     use HasFactory, HasUuids;
     public $timestamps = true;
     public $incrementing = false;
-    protected $fillable = ['content', 'role', 'status'] ;
+    protected $fillable = ['name', 'status'] ;
 }

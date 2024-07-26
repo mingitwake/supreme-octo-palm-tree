@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('chatlogs', function (Blueprint $table) {
-            $table->foreign(['uid'], 'chatlogs_ibfk_1')->references(['uid'])->on('users')->onUpdate('restrict')->onDelete('cascade');
+        Schema::create('chats', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->text('content')->nullable();
+            $table->string('role')->default('asst');
+            $table->string('status')->default('active');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('chatlogs', function (Blueprint $table) {
-            $table->dropForeign('chatlogs_ibfk_1');
-        });
+        Schema::dropIfExists('chats');
     }
 };
