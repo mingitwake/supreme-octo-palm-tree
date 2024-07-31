@@ -22,8 +22,9 @@ class DocumentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'url' => 'required|url|max:2048',
-            'status' => 'required|string|in:active,inactive',
+            'collection_id' => 'required|string|max:36',
+            'url' => 'string|max:512',
+            'status' => 'string|in:active,inactive',
         ];
     }
 }

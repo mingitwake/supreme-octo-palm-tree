@@ -9,10 +9,14 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:api');
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\LogController;
 
 Route::apiResource('chats', ChatController::class);
+Route::apiResource('collections', CollectionController::class);
 Route::apiResource('documents', DocumentController::class);
+Route::apiResource('logs', LogController::class);
 
 Route::middleware('api')->group(function () {
 

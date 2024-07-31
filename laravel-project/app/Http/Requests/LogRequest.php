@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ChatRequest extends FormRequest
+class LogRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,7 @@ class ChatRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'log_id'=> 'required|string|max:36',
-            'content' => 'string|max:200',
-            'role' => 'string|in:user,admin,asst',
+            'title' => 'string|max:64',
             'status' => 'string|in:active,inactive',
         ];
     }

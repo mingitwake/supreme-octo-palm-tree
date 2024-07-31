@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('documents', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('url')->nullable();
-            $table->string('status')->default('active');
-            $table->timestamps();
+        Schema::table('chats', function (Blueprint $table) {
+            $table->foreign(['log_id'], 'chats_ibfk_1')->references(['id'])->on('logs')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('documents');
+        Schema::table('chats', function (Blueprint $table) {
+            $table->dropForeign('chats_ibfk_1');
+        });
     }
 };

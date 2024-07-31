@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('collections', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name')->default('New Chat');
-            $table->string('status')->default('active');
-            $table->timestamps();
+        Schema::table('documents', function (Blueprint $table) {
+            $table->foreign(['collection_id'], 'documents_ibfk_1')->references(['id'])->on('collections')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('collections');
+        Schema::table('documents', function (Blueprint $table) {
+            $table->dropForeign('documents_ibfk_1');
+        });
     }
 };

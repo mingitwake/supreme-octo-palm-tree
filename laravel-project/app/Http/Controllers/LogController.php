@@ -2,27 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DocumentRequest;
-use App\Models\Document;
+use App\Http\Requests\LogRequest;
+use App\Models\Log;
 use Illuminate\Http\JsonResponse;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 
-class DocumentController extends Controller
+class LogController extends Controller
 {
     public function index(): JsonResponse
     {
-        $documents = Document::all(); // You can change this to paginate in the future
-        return response()->json($documents, 200);
+        $logs = Log::all(); // You can change this to paginate in the future
+        return response()->json($logs, 200);
     }
-    // curl -i -X GET http://127.0.0.1:8080/api/documents
+    // curl -i -X GET http://127.0.0.1:8080/api/logs
 
-    public function store(DocumentRequest $request): JsonResponse
+    public function store(LogRequest $request): JsonResponse
     {
         try {
-            $document = Document::create($request->validated());
-            return response()->json($document, 201);
+            $log = Log::create($request->validated());
+            return response()->json($log, 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation error',
@@ -40,28 +40,28 @@ class DocumentController extends Controller
             ], 500);
         }
     }
-    // curl -i -X POST http://127.0.0.1:8080/api/documents -H "Content-Type: application/json" --json "{\"collection_id\": \"\", \"url\": \"\", \"status\": \"active\"}"
+    // curl -i -X POST http://127.0.0.1:8080/api/logs -H "Content-Type: application/json" --json "{\"title\": \"\", \"status\": \"active\"}"
 
     public function show($id): JsonResponse
     {
         try {
-            $document = Document::findOrFail($id);
-            return response()->json($document, 200);
+            $log = Log::findOrFail($id);
+            return response()->json($log, 200);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Document not found',
+                'message' => 'Log not found',
                 'error' => $e->getMessage()
             ], 404);
         }
     }
-    // curl -X GET http://127.0.0.1:8080/api/documents/{id}
+    // curl -X GET http://127.0.0.1:8080/api/logs/{id}
 
-    public function update(DocumentRequest $request, $id): JsonResponse
+    public function update(LogRequest $request, $id): JsonResponse
     {
         try {
-            $document = Document::findOrFail($id);
-            $document->update($request->validated());
-            return response()->json($document, 200);
+            $log = Log::findOrFail($id);
+            $log->update($request->validated());
+            return response()->json($log, 200);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation error',
@@ -79,20 +79,20 @@ class DocumentController extends Controller
             ], 500);
         }
     }
-    // curl -i -X PUT http://127.0.0.1:8080/api/documents/{id} -H "Content-Type: application/json" --json "{\"collection_id\": \"\", \"url\": \"\", \"status\": \"active\"}"
+    // curl -i -X PUT http://127.0.0.1:8080/api/logs/{id} -H "Content-Type: application/json" --json "{\"title\": \"\", \"status\": \"active\"}"
 
     public function destroy($id): JsonResponse
     {
         try {
-            $document = Document::findOrFail($id);
-            $document->delete();
+            $log = Log::findOrFail($id);
+            $log->delete();
             return response()->json(null, 204);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Document not found',
+                'message' => 'Log not found',
                 'error' => $e->getMessage()
             ], 404);
         }
     }
-    // curl -X DELETE http://127.0.0.1:8080/api/documents/{id}
+    // curl -X DELETE http://127.0.0.1:8080/api/logs/{id}
 }

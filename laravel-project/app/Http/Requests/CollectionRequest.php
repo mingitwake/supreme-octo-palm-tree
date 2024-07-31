@@ -22,8 +22,8 @@ class CollectionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:64',
-            'status' => 'required|string|in:active,inactive',
+            'name'=> 'string|max:64',
+            'status' => 'string|in:active,inactive',
         ];
     }
 }

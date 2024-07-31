@@ -16,7 +16,7 @@ class ChatController extends Controller
         $chats = Chat::all(); // You can change this to paginate in the future
         return response()->json($chats, 200);
     }
-    // curl -i -X GET http://127.0.0.1:8000/api/chats
+    // curl -i -X GET http://127.0.0.1:8080/api/chats
 
     public function store(ChatRequest $request): JsonResponse
     {
@@ -40,7 +40,7 @@ class ChatController extends Controller
             ], 500);
         }
     }
-    // curl -i -X POST http://127.0.0.1:8000/api/chats -H "Content-Type: application/json" --json "{\"content\": \"This is a chat message!\", \"role\": \"user\", \"status\": \"active\"}"
+    // curl -i -X POST http://127.0.0.1:8080/api/chats -H "Content-Type: application/json" --json "{\"log_id\": \"\", \"content\": \"\", \"role\": \"user\", \"status\": \"active\"}"
 
     public function show($id): JsonResponse
     {
@@ -54,7 +54,7 @@ class ChatController extends Controller
             ], 404);
         }
     }
-    // curl -X GET http://127.0.0.1:8000/api/chats/{id}
+    // curl -X GET http://127.0.0.1:8080/api/chats/{id}
 
     public function update(ChatRequest $request, $id): JsonResponse
     {
@@ -79,7 +79,7 @@ class ChatController extends Controller
             ], 500);
         }
     }
-    // curl -i -X PUT http://127.0.0.1:8000/api/chats/{id} -H "Content-Type: application/json" --json "{\"content\": \"This is a chat message!\", \"role\": \"user\", \"status\": \"active\"}"
+    // curl -i -X PUT http://127.0.0.1:8080/api/chats/{id} -H "Content-Type: application/json" --json "{\"log_id\": \"\", \"content\": \"\", \"role\": \"user\", \"status\": \"active\"}"
 
     public function destroy($id): JsonResponse
     {
@@ -94,5 +94,5 @@ class ChatController extends Controller
             ], 404);
         }
     }
-    // curl -X DELETE http://127.0.0.1:8000/api/chats/{id}
+    // curl -X DELETE http://127.0.0.1:8080/api/chats/{id}
 }
