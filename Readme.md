@@ -75,6 +75,10 @@ if path misconfiguration occurs, create a laravel project and move the files int
 >
 > ``composer require guzzlehttp/guzzle``
 >
+> ``composer require --dev "kitloong/laravel-migrations-generator"``
+>
+> ``php artisan migrate:generate``
+>
 > ``php artisan make:controller <Controller> --resource``
 >
 > ``php artisan migrate``
