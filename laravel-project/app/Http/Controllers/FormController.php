@@ -2,28 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreChatRequest;
-use App\Http\Requests\UpdateChatRequest;
-use App\Models\Chat;
+use App\Http\Requests\StoreFormRequest;
+use App\Http\Requests\UpdateFormRequest;
+use App\Models\Form;
 use Illuminate\Http\JsonResponse;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 
-class ChatController extends Controller
+class FormController extends Controller
 {
     public function index(): JsonResponse
     {
-        $chats = Chat::all(); // You can change this to paginate in the future
-        return response()->json($chats, 200);
+        $forms = Form::all(); // You can change this to paginate in the future
+        return response()->json($forms, 200);
     }
-    // curl -i -X GET http://127.0.0.1:8080/api/chats
+    // curl -i -X GET http://127.0.0.1:8080/api/forms
 
-    public function store(StoreChatRequest $request): JsonResponse
+    public function store(StoreFormRequest $request): JsonResponse
     {
         try {
-            $chat = Chat::create($request->validated());
-            return response()->json($chat, 201);
+            $form = Form::create($request->validated());
+            return response()->json($form, 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation error',
@@ -41,28 +41,28 @@ class ChatController extends Controller
             ], 500);
         }
     }
-    // curl -i -X POST http://127.0.0.1:8080/api/chats -H "Content-Type: application/json" --json "{\"log_id\": \"\", \"content\": \"\", \"role\": \"user\", \"status\": \"active\"}"
+    // curl -i -X POST http://127.0.0.1:8080/api/forms -H "Content-Type: application/json" --json "{\"log_id\": \"\", \"content\": \"\", \"role\": \"user\", \"status\": \"active\"}"
 
     public function show($id): JsonResponse
     {
         try {
-            $chat = Chat::findOrFail($id);
-            return response()->json($chat, 200);
+            $form = Form::findOrFail($id);
+            return response()->json($form, 200);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Chat not found',
+                'message' => 'Form not found',
                 'error' => $e->getMessage()
             ], 404);
         }
     }
-    // curl -X GET http://127.0.0.1:8080/api/chats/{id}
+    // curl -X GET http://127.0.0.1:8080/api/forms/{id}
 
-    public function update(UpdateChatRequest $request, $id): JsonResponse
+    public function update(UpdateFormRequest $request, $id): JsonResponse
     {
         try {
-            $chat = Chat::findOrFail($id);
-            $chat->update($request->validated());
-            return response()->json($chat, 200);
+            $form = Form::findOrFail($id);
+            $form->update($request->validated());
+            return response()->json($form, 200);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation error',
@@ -80,20 +80,20 @@ class ChatController extends Controller
             ], 500);
         }
     }
-    // curl -i -X PUT http://127.0.0.1:8080/api/chats/{id} -H "Content-Type: application/json" --json "{\"log_id\": \"\", \"content\": \"\", \"role\": \"user\", \"status\": \"active\"}"
+    // curl -i -X PUT http://127.0.0.1:8080/api/forms/{id} -H "Content-Type: application/json" --json "{\"log_id\": \"\", \"content\": \"\", \"role\": \"user\", \"status\": \"active\"}"
 
     public function destroy($id): JsonResponse
     {
         try {
-            $chat = Chat::findOrFail($id);
-            $chat->delete();
+            $form = Form::findOrFail($id);
+            $form->delete();
             return response()->json(null, 204);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Chat not found',
+                'message' => 'Form not found',
                 'error' => $e->getMessage()
             ], 404);
         }
     }
-    // curl -X DELETE http://127.0.0.1:8080/api/chats/{id}
+    // curl -X DELETE http://127.0.0.1:8080/api/forms/{id}
 }

@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DocumentRequest;
+use App\Http\Requests\StoreDocumentRequest;
+use App\Http\Requests\UpdateDocumentRequest;
 use App\Models\Document;
 use Illuminate\Http\JsonResponse;
 use Exception;
@@ -18,7 +19,7 @@ class DocumentController extends Controller
     }
     // curl -i -X GET http://127.0.0.1:8080/api/documents
 
-    public function store(DocumentRequest $request): JsonResponse
+    public function store(StoreDocumentRequest $request): JsonResponse
     {
         try {
             $document = Document::create($request->validated());
@@ -56,7 +57,7 @@ class DocumentController extends Controller
     }
     // curl -X GET http://127.0.0.1:8080/api/documents/{id}
 
-    public function update(DocumentRequest $request, $id): JsonResponse
+    public function update(UpdateDocumentRequest $request, $id): JsonResponse
     {
         try {
             $document = Document::findOrFail($id);
