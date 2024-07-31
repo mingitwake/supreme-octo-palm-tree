@@ -35,7 +35,7 @@ EMBEDDING = AzureOpenAIEmbeddings(
 # Prompt Template
 PROMPT = ChatPromptTemplate.from_messages([
     SystemMessage(content="You are Jenny, an administrative assistant at HKU. Provide concise and accurate responses. Only include information you are certain about."),
-    HumanMessagePromptTemplate.from_template("Query: {query}\n Source: {content}\n Answer: "),
+    HumanMessagePromptTemplate.from_template("Query: {query}\n Histories: {histories}\n Source: {content}\n Answer: "),
 ])
 
 class ChromaWrapper:
@@ -81,8 +81,8 @@ class ChromaWrapper:
             search_kwargs={"score_threshold": score_threshold, "k": k}
         )
     
-    def get_response(self, query, model=MODEL, prompt=PROMPT):
-        return (prompt | model).invoke({"content": self.retriever.invoke(query), "query": query}).content
+    def get_response(self, query, histories="", model=MODEL, prompt=PROMPT):
+        return (prompt | model).invoke({"content": self.retriever.invoke(query), "histories": histories, "query": query}).content
     
     def clean(self):
         self.client.delete_collection(self.collection_name)

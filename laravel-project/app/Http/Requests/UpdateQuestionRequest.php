@@ -24,6 +24,7 @@ class UpdateQuestionRequest extends FormRequest
         return [
             "form_id"=> "string|max:36",
             "content"=> "string|max:512",
+            "type"=> "string",
             "remarks"=> "string|max:512",
             "status"=> "string|in:active,inactive",
         ];

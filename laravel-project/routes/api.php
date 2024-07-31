@@ -12,11 +12,19 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\FormController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ResponseController;
+use App\Http\Controllers\AnswerController;
 
 Route::apiResource('chats', ChatController::class);
 Route::apiResource('collections', CollectionController::class);
 Route::apiResource('documents', DocumentController::class);
 Route::apiResource('logs', LogController::class);
+Route::apiResource('forms', FormController::class);
+Route::apiResource('questions', QuestionController::class);
+Route::apiResource('responses', ResponseController::class);
+Route::apiResource('answers', AnswerController::class);
 
 Route::middleware('api')->group(function () {
 

@@ -30,6 +30,7 @@ class WriteRequest(BaseModel):
 class ChatRequest(BaseModel):
     query: str
     collection: str
+    histories: str
 
 class CleanRequest(BaseModel):
     collection: str
@@ -37,7 +38,7 @@ class CleanRequest(BaseModel):
 @app.post("/chat")
 async def chat(request: ChatRequest):
     try:
-        result = read(collection_name=request.collection, query=request.query)
+        result = read(collection_name=request.collection, query=request.query, histories=request.histories)
         return {"message": result}
     except Exception:
         raise HTTPException(status_code=500, detail="Error")

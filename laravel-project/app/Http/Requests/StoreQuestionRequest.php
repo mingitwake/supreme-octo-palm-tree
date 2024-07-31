@@ -23,7 +23,8 @@ class StoreQuestionRequest extends FormRequest
     {
         return [
             "form_id"=> "required|string|max:36",
-            "content"=> "string|max:512",
+            "content"=> "required|string|max:512",
+            "type"=> "required|string",
             "remarks"=> "string|max:512",
             "status"=> "string|in:active,inactive",
         ];

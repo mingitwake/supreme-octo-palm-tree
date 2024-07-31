@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('form_id')->index('form_id');
             $table->string('content')->nullable();
+            $table->string('type')->nullable();
             $table->string('remarks')->nullable();
             $table->string('status')->nullable()->default('active');
             $table->timestamps();

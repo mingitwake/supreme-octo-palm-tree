@@ -11,5 +11,5 @@ class Question extends Model
     use HasFactory, HasUuids;
     public $timestamps = true;
     public $incrementing = false;
-    protected $fillable = ['form_id', 'content', 'remarks', 'status'] ;
+    protected $fillable = ['form_id', 'content', 'type', 'remarks', 'status'] ;
 }
