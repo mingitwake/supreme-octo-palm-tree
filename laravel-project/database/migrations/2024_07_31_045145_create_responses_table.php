@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('documents', function (Blueprint $table) {
-            $table->foreign(['collection_id'], 'documents_ibfk_1')->references(['id'])->on('collections')->onUpdate('restrict')->onDelete('restrict');
+        Schema::create('responses', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('form_id')->index('form_id');
+            $table->string('remarks')->nullable();
+            $table->string('status')->nullable()->default('active');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('documents', function (Blueprint $table) {
-            $table->dropForeign('documents_ibfk_1');
-        });
+        Schema::dropIfExists('responses');
     }
 };
