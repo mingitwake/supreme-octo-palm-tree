@@ -79,6 +79,8 @@ if path misconfiguration occurs, create a laravel project and move the files int
 >
 > ``php artisan migrate:generate``
 >
+> ``php artisan config:publish cors``
+>
 > ``php artisan make:controller <Controller> --resource``
 >
 > ``php artisan migrate``
