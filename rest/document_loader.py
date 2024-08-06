@@ -22,5 +22,5 @@ def read_urls(urls):
             content = '\n'.join(soup.stripped_strings)
             documents.extend(split([Document(page_content=content, metadata={"source": url})]))
         except requests.RequestException as e:
-            print(f"Error fetching {url}: {e}")
+            documents.extend([Document(page_content="", metadata={"source": url, "error": "true"})])
     return documents

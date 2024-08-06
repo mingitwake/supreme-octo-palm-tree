@@ -92,3 +92,15 @@ directories and files that require modification
 - database/migrations/
 - resources/views/
 - routes/web.php
+
+# Nginx As Reverse Proxy
+wsl -d Ubuntu-22.04
+https://saaslit.com/blog/laravel/how-to-install-laravel-11-on-linux
+https://www.how2shout.com/how-to/install-nginx-php-mysql-wsl-windows-10.html
+https://www.baeldung.com/linux/nginx-cross-origin-policy-headers
+https://laravel.com/docs/11.x/deployment#server-configuration
+
+note* leave server name as wildcard _
+For Windows servers, firewall configuration might be required.
+
+Get the server ip address with ipconfig (Windows) or ifconfig (Linux)

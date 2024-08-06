@@ -5,6 +5,7 @@ from langchain_chroma import Chroma
 from langchain_core.messages import SystemMessage
 from langchain_core.prompts import HumanMessagePromptTemplate, ChatPromptTemplate
 from chromadb.config import DEFAULT_TENANT, DEFAULT_DATABASE, Settings
+import json
 
 from dotenv import load_dotenv, dotenv_values 
 load_dotenv() 
@@ -96,12 +97,24 @@ def write(collection_name, documents, embedding=EMBEDDING):
     writer.get_index()
     writer.add_documents(documents=documents)
         
-def read(collection_name, query, embedding=EMBEDDING, model=MODEL, prompt=PROMPT):
+def read(collection_name, query, histories, embedding=EMBEDDING, model=MODEL, prompt=PROMPT):
     reader = ChromaWrapper(embedding=embedding, collection_name=collection_name)
     reader.get_index()
     reader.setup_retriever()
-    return(reader.get_response(query=query))
+    return(reader.get_response(query=query, histories=histories))
 
-def clear(collection_name, embedding=EMBEDDING):
+def clean(collection_name, embedding=EMBEDDING):
     cleaner = ChromaWrapper(collection_name, embedding)
     cleaner.clean()
+
+def delete(collection_name, embedding=EMBEDDING):
+    writer = ChromaWrapper(embedding=embedding, collection_name=collection_name)
+    writer.get_index()
+    ids = writer.index.get(where={"error":"true"}, include=[])["ids"]
+    if len(ids): writer.index.delete(ids=ids)
+
+def get(collection_name, embedding=EMBEDDING):
+    writer = ChromaWrapper(embedding=embedding, collection_name=collection_name)
+    writer.get_index()
+    return(writer.index.get(where={"error":{"$ne": "true"}}))
+
