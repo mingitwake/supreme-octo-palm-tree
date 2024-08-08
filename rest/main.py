@@ -1,8 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from chromawrapper import create, read, write, clean, get, delete
-from document_loader import read_urls
+from chromawrapper import create, read, write, clean, show, delete
+from document_loader import read_urls, read_files
 
 app = FastAPI()
 
@@ -23,11 +23,21 @@ app.add_middleware(
 class CreateRequest(BaseModel):
     collection: str
 
-class WriteRequest(BaseModel):
-    document: str
+class WriteUrlRequest(BaseModel):
+    url: str
+    id: str
     collection: str
 
-class GetRequest(BaseModel):
+class WriteFileRequest(BaseModel):
+    file: str
+    id: str
+    collection: str
+
+class DeleteRequest(BaseModel):
+    id: str
+    collection: str
+
+class ShowRequest(BaseModel):
     collection: str
 
 class ChatRequest(BaseModel):
@@ -54,13 +64,22 @@ async def create_collection(request: CreateRequest):
     except Exception:
         raise HTTPException(status_code=500, detail="Error")
 
-@app.put("/upload")
-async def write_document(request: WriteRequest):
+@app.put("/upload_url")
+async def write_document(request: WriteUrlRequest):
     try:
-        document_list = read_urls(urls=[request.document])
+        document_list = read_urls(urls=[request.url], ids=[request.id])
         write(collection_name=request.collection, documents=document_list)
         return {"message": "OK"}
-    except Exception as e:
+    except Exception:
+        raise HTTPException(status_code=500, detail="Error")
+    
+@app.put("/upload_file")
+async def write_document(request: WriteFileRequest):
+    try:
+        document_list = read_files(files=[request.file], ids=[request.id])
+        write(collection_name=request.collection, documents=document_list)
+        return {"message": "OK"}
+    except Exception:
         raise HTTPException(status_code=500, detail="Error")
 
 @app.delete("/clean")
@@ -71,18 +90,18 @@ async def clean_collection(request: CleanRequest):
     except Exception:
         raise HTTPException(status_code=500, detail="Error")
     
-@app.get("/list")
-async def get_errors(request: GetRequest):
+@app.post("/show")
+async def show_documents(request: ShowRequest):
     try:
-        result=get(collection_name=request.collection)
+        result=show(collection_name=request.collection)
         return {"message": result}
     except Exception:
         raise HTTPException(status_code=500, detail="Error")
     
-@app.post("/delete")
-async def get_errors(request: GetRequest):
+@app.delete("/delete")
+async def delete_document(request: DeleteRequest):
     try:
-        delete(collection_name=request.collection)
+        delete(collection_name=request.collection,id=request.id)
         return {"message": "OK"}
     except Exception:
         raise HTTPException(status_code=500, detail="Error")

@@ -57,7 +57,7 @@ class ChromaWrapper:
         if reset: self.client.reset()
     
     def create_index(self):
-        DUMMY_DOCUMENT = Document(page_content="", metadata={"source": ""})
+        DUMMY_DOCUMENT = Document(page_content="", metadata={"source": "", "id": ""})
         self.index = Chroma.from_documents(
             documents=[DUMMY_DOCUMENT], 
             embedding=self.embedding, 
@@ -89,7 +89,7 @@ class ChromaWrapper:
         self.client.delete_collection(self.collection_name)
         
 def create(collection_name, embedding=EMBEDDING):
-    creater = ChromaWrapper(embedding=embedding, collection_name=collection_name)
+    creater = ChromaWrapper(embedding=embedding, collection_name=collection_name, reset=True)
     creater.create_index()
 
 def write(collection_name, documents, embedding=EMBEDDING):
@@ -107,14 +107,14 @@ def clean(collection_name, embedding=EMBEDDING):
     cleaner = ChromaWrapper(collection_name, embedding)
     cleaner.clean()
 
-def delete(collection_name, embedding=EMBEDDING):
+def delete(collection_name, id, embedding=EMBEDDING):
     writer = ChromaWrapper(embedding=embedding, collection_name=collection_name)
     writer.get_index()
-    ids = writer.index.get(where={"error":"true"}, include=[])["ids"]
+    ids = writer.index.get(where={"id":id}, include=[])["ids"]
     if len(ids): writer.index.delete(ids=ids)
 
-def get(collection_name, embedding=EMBEDDING):
+def show(collection_name, embedding=EMBEDDING):
     writer = ChromaWrapper(embedding=embedding, collection_name=collection_name)
     writer.get_index()
-    return(writer.index.get(where={"error":{"$ne": "true"}}))
+    return(writer.index.get())
 

@@ -9,3 +9,4 @@ langchain-text-splitters
 langchain-openai
 langchain-community
 uvicorn
+azure-ai-formrecognizer
