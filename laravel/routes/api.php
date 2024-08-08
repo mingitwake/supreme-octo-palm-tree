@@ -69,6 +69,10 @@ Route::get('document_pages', function (Request $request) {
     return $query->paginate(20);
 });
 
+use App\Http\Controllers\EmailController;
+Route::post('send-email', [EmailController::class, 'sendEmail']);
+
+
 Route::middleware('api')->group(function () {
 
     Route::post('/service/create', function () {

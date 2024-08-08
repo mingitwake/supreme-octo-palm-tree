@@ -84,6 +84,8 @@ if path misconfiguration occurs, create a laravel project and move the files int
 > ``php artisan make:controller <Controller> --resource``
 >
 > ``php artisan migrate``
+>
+> ``composer require symfony/postmark-mailer symfony/http-client``
 
 directories and files that require modification
 - .env
