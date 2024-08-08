@@ -22,8 +22,9 @@ class UpdateDocumentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|max:128',
-            'storage' => 'string|max:128',
+            'alias' => 'nullable|string|max:128',
+            // 'url' => 'nullable|url',
+            // 'file' => 'nullable|file',
             'status' => 'string|in:active,inactive',
         ];
     }

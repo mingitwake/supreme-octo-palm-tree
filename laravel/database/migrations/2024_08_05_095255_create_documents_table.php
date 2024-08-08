@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->uuid('id')->primary();
             // $table->uuid('collection_id')->index('collection_id');
-            $table->string('title')->nullable();
-            $table->string('storage')->nullable();
+            $table->string('alias')->nullable();
+            $table->string('url')->nullable();
+            $table->string('file')->nullable();
             $table->string('status')->nullable()->default('active');
             $table->timestamps();
         });

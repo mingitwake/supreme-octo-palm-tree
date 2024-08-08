@@ -28,7 +28,7 @@ class ChatController extends Controller
     {
         try {
             $chat = Chat::create($request->validated());
-            return response()->json($chat, 201);
+            return response()->json(["id" => $chat->id, "created_at" => $chat->created_at], 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation error',

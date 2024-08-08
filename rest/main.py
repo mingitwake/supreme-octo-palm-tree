@@ -69,7 +69,7 @@ async def write_document(request: WriteUrlRequest):
     try:
         document_list = read_urls(urls=[request.url], ids=[request.id])
         write(collection_name=request.collection, documents=document_list)
-        return {"message": "OK"}
+        return {"message": f"Document #{request.id} Uploaded"}
     except Exception:
         raise HTTPException(status_code=500, detail="Error")
     
@@ -78,7 +78,7 @@ async def write_document(request: WriteFileRequest):
     try:
         document_list = read_files(files=[request.file], ids=[request.id])
         write(collection_name=request.collection, documents=document_list)
-        return {"message": "OK"}
+        return {"message": f"Document #{request.id} Uploaded"}
     except Exception:
         raise HTTPException(status_code=500, detail="Error")
 

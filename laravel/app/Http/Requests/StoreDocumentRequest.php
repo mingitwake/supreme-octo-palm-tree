@@ -22,9 +22,10 @@ class StoreDocumentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|max:128',
-            'storage' => 'string|max:128',
-            'status' => 'string|in:active,inactive',
+            'alias' => 'nullable|string|max:128',
+            'url' => 'nullable|url',
+            'file' => 'nullable|file',
+            'status' => 'nullable|string|in:active,inactive',
         ];
     }
 }

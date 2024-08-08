@@ -11,5 +11,5 @@ class Document extends Model
     use HasFactory, HasUuids;
     public $timestamps = true;
     public $incrementing = false;
-    protected $fillable = ['title', 'storage', 'status'] ;
+    protected $fillable = ['alias', 'url', 'file', 'status'] ;
 }

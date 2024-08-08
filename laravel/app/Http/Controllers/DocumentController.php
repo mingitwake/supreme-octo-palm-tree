@@ -27,8 +27,20 @@ class DocumentController extends Controller
     public function store(StoreDocumentRequest $request): JsonResponse
     {
         try {
-            $document = Document::create($request->validated());
-            return response()->json($document, 201);
+            $validated = $request->validated();
+    
+            if ($request->hasFile('file')) {
+                $filePath = $request->file('file')->store('uploads');
+                $validated['file'] = $filePath;
+                $document = Document::create($validated);
+                return response()->json(["id" => $document->id, "file" => $document->file, "created_at" => $document->created_at], 202);
+            }
+
+            if ($request->has('url')) {
+                $url = $request->input('url');
+                $document = Document::create($validated);
+                return response()->json(["id" => $document->id, "url" =>$document->url, "created_at" => $document->created_at], 202);
+            }
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation error',
@@ -89,7 +101,7 @@ class DocumentController extends Controller
         try {
             $document = Document::findOrFail($id);
             $document->delete();
-            return response()->json(null, 204);
+            return response()->json(["id" => $id], 202);
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Document not found',

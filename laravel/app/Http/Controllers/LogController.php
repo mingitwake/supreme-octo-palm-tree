@@ -28,7 +28,7 @@ class LogController extends Controller
     {
         try {
             $log = Log::create($request->validated());
-            return response()->json($log, 201);
+            return response()->json(["id" => $log->id, "created_at" => $log->created_at], 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation error',

@@ -22,8 +22,8 @@ class StoreLogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'string|max:64',
-            'status' => 'string|in:active,inactive',
+            'title' => 'nullable|string|max:64',
+            'status' => 'nullable|string|in:active,inactive',
         ];
     }
 }

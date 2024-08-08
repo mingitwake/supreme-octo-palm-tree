@@ -22,10 +22,10 @@ class UpdateChatRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'log_id'=> 'string|max:36',
-            'content' => 'string|max:200',
-            'role' => 'string|in:user,admin,asst',
-            'status' => 'string|in:active,inactive',
+            'log_id'=> 'nullable|string|max:36',
+            'content' => 'nullable|string|max:200',
+            'role' => 'nullable|string|in:user,admin,asst',
+            'status' => 'nullable|string|in:active,inactive',
         ];
     }
 }
