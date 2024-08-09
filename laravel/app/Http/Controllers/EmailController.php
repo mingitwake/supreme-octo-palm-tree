@@ -17,7 +17,6 @@ class EmailController extends Controller
             'content' => 'nullable|string',
         ]);
 
-        // $replyTo = $request->input('reply_to');
         $replyToEmail = $request->input('reply_to_email');
 
         $remind = Remind::create($validated);

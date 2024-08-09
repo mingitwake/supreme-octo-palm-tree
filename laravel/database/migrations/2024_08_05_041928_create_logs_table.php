@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('logs', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('title')->nullable()->default('Untitled');
-            $table->string('status')->nullable()->default('active');
+            $table->integer('status')->nullable()->default(1);
             $table->timestamps();
         });
     }

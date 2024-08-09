@@ -25,7 +25,7 @@ class UpdateDocumentRequest extends FormRequest
             'alias' => 'nullable|string|max:128',
             // 'url' => 'nullable|url',
             // 'file' => 'nullable|file',
-            'status' => 'string|in:active,inactive',
+            'status' => 'nullable|integer',
         ];
     }
 }

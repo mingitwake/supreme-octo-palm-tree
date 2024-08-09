@@ -25,7 +25,7 @@ class StoreChatRequest extends FormRequest
             'log_id'=> 'required|string|max:36',
             'content' => 'nullable|string|max:200',
             'role' => 'required|string|in:user,admin,asst',
-            'status' => 'nullable|string|in:active,inactive',
+            'status' => 'nullable|integer',
         ];
     }
 }

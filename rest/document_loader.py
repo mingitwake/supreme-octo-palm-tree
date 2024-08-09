@@ -31,6 +31,7 @@ def read_files(filepath):
     # For how to obtain the endpoint and key, please see PREREQUISITES above.
     endpoint = os.environ["DI_ENDPOINT"]
     key = os.environ["DI_API_KEY"]
+    # path = "/var/www/laravel/storage/app/uploads/"
 
     document_intelligence_client = DocumentIntelligenceClient(endpoint=endpoint, credential=AzureKeyCredential(key))
     

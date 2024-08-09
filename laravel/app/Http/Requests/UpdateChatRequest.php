@@ -25,7 +25,7 @@ class UpdateChatRequest extends FormRequest
             'log_id'=> 'nullable|string|max:36',
             'content' => 'nullable|string|max:200',
             'role' => 'nullable|string|in:user,admin,asst',
-            'status' => 'nullable|string|in:active,inactive',
+            'status' => 'nullable|integer',
         ];
     }
 }

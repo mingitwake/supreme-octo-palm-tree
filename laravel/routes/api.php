@@ -17,33 +17,11 @@ use App\Http\Controllers\DocumentController;
 Route::apiResource('documents', DocumentController::class);
 
 use App\Models\Chat;
-Route::get('chat_pages', function (Request $request) {
-    $query = Chat::query();
-    
-    if ($logId = $request->input('log_id')) {
-        $query->where('log_id', $logId);
-    }
-    
-    if ($role = $request->input('role')) {
-        $query->where('role', $role);
-    }
-
-    if ($status = $request->input('status')) {
-        $query->where('status', $status);
-    }
-
-    if ($sortBy = $request->input('sort_by')) {
-        $sortOrder = $request->input('sort_order', 'asc');
-        $query->orderBy($sortBy, $sortOrder);
-    } else {
-        $query->orderBy('created_at', 'desc');
-    }
-
-    return $query->paginate(20);
-});
-
-Route::get('chat_latest_n_records', function (Request $request) {
-    
+Route::get('chat-nlatest', function (Request $request) {
+    $validated = $request->validate([
+        'log_id' => 'nullable|string|max:36',
+        'n' => 'nullable|integer',
+    ]);
     $logId = $request->input('log_id');
     $n = $request->input('n', 10);
     $query = Chat::where('log_id', $logId);
@@ -51,28 +29,10 @@ Route::get('chat_latest_n_records', function (Request $request) {
 
 });
 
-use App\Models\Document;
-Route::get('document_pages', function (Request $request) {
-    $query = Document::query();
-    
-    if ($search = $request->input('search')) {
-        $query->where('alias', 'LIKE', '%' . $search . '%');
-    }
-    
-    if ($sortBy = $request->input('sort_by')) {
-        $sortOrder = $request->input('sort_order', 'asc');
-        $query->orderBy($sortBy, $sortOrder);
-    } else {
-        $query->orderBy('created_at', 'desc');
-    }
-
-    return $query->paginate(20);
-});
-
 use App\Http\Controllers\EmailController;
 Route::post('send-email', [EmailController::class, 'sendEmail']);
 
-
+use Illuminate\Support\Facades\Cache;
 Route::middleware('api')->group(function () {
 
     Route::post('/service/create', function () {
@@ -114,12 +74,16 @@ Route::middleware('api')->group(function () {
     Route::post('/service/chat', function (Request $request) {
         try {
 
+            $cacheKey = 'chat_' . md5(json_encode($request->only(['collection', 'query'])));
+            if (Cache::has($cacheKey)) {
+                return response()->json(Cache::get($cacheKey));
+            }
+
             $response = Http::post('http://localhost:5000/chat', request());
             if ($response->failed()) {
                 return response()->json(['error' => 'Failed to chat'], 500);
-                // return response()->json(['error' => $response->body()], 500);
             }
-
+            Cache::set($cacheKey, $response->json(), now()->addMinutes(10));
             return $response->json();
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error occurred while processing chat'], 500);

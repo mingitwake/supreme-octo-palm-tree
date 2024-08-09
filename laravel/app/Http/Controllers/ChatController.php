@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreChatRequest;
 use App\Http\Requests\UpdateChatRequest;
 use App\Models\Chat;
@@ -18,10 +19,45 @@ use Illuminate\Validation\ValidationException;
 
 class ChatController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request)//: JsonResponse
     {
-        $chats = Chat::all(); // You can change this to paginate in the future
-        return response()->json($chats, 200);
+        // $chats = Chat::all(); // You can change this to paginate in the future
+
+        $validated = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'log_id' => 'nullable|string|max:36',
+            'role' => 'nullable|string|in:user,asst,admin',
+            'status' => 'nullable|integer',
+            'sort_by' => 'nullable|string|in:asc,desc',
+        ]);
+
+        $query = Chat::query();
+
+        if ($search = $request->input('search')) {
+            $query->where('content', 'LIKE', '%' . $search . '%');
+        }
+    
+        if ($logId = $request->input('log_id')) {
+            $query->where('log_id', $logId);
+        }
+        
+        if ($role = $request->input('role')) {
+            $query->where('role', $role);
+        }
+    
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+    
+        if ($sortBy = $request->input('sort_by')) {
+            $sortOrder = $request->input('sort_order', 'asc');
+            $query->orderBy($sortBy, $sortOrder);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+    
+        return $query->paginate(10);
+        // return response()->json($chats, 200);
     }
 
     public function store(StoreChatRequest $request): JsonResponse

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreDocumentRequest;
 use App\Http\Requests\UpdateDocumentRequest;
 use App\Models\Document;
@@ -9,6 +10,8 @@ use Illuminate\Http\JsonResponse;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Storage;
 
 // curl -i -X GET http://127.0.0.1/api/documents
 // curl -i -X POST http://127.0.0.1/api/documents -H "Content-Type: application/json" --json "{\"log_id\": \"\", \"content\": \"\", \"role\": \"user\", \"status\": \"active\"}"
@@ -18,10 +21,30 @@ use Illuminate\Validation\ValidationException;
 
 class DocumentController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request)//: JsonResponse
     {
-        $documents = Document::all(); // You can change this to paginate in the future
-        return response()->json($documents, 200);
+        // $documents = Document::all(); // You can change this to paginate in the future
+        $query = Document::query();
+
+        $validated = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'status' => 'nullable|integer',
+            'sort_by' => 'nullable|string|in:asc,desc',
+        ]);
+    
+        if ($search = $request->input('search')) {
+            $query->where('alias', 'LIKE', '%' . $search . '%');
+        }
+        
+        if ($sortBy = $request->input('sort_by')) {
+            $sortOrder = $request->input('sort_order', 'asc');
+            $query->orderBy($sortBy, $sortOrder);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+    
+        return $query->paginate(10);
+        // return response()->json($documents, 200);
     }
 
     public function store(StoreDocumentRequest $request): JsonResponse
@@ -30,7 +53,11 @@ class DocumentController extends Controller
             $validated = $request->validated();
     
             if ($request->hasFile('file')) {
-                $filePath = $request->file('file')->store('uploads');
+                // $filePath = $request->file('file')->store('uploads', 'local');
+                // $filePath = Storage::disk('local')->put('uploads', $request->file('file'));
+                $filePath = $request->file('file')->storeAs(
+                    'uploads', $request->file('file')->getClientOriginalName()
+                );
                 $validated['file'] = $filePath;
                 $document = Document::create($validated);
                 return response()->json(["id" => $document->id, "file" => $document->file, "created_at" => $document->created_at], 202);
@@ -57,6 +84,7 @@ class DocumentController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+        return response()->json([], 500);
     }
     
     public function show($id): JsonResponse
@@ -100,6 +128,7 @@ class DocumentController extends Controller
     {
         try {
             $document = Document::findOrFail($id);
+            Storage::delete($document->file);
             $document->delete();
             return response()->json(["id" => $id], 202);
         } catch (Exception $e) {

@@ -24,8 +24,8 @@ class StoreDocumentRequest extends FormRequest
         return [
             'alias' => 'nullable|string|max:128',
             'url' => 'nullable|url',
-            'file' => 'nullable|file',
-            'status' => 'nullable|string|in:active,inactive',
+            'file' => 'nullable|file|mimes:jpg,png,pdf',
+            'status' => 'nullable|integer',
         ];
     }
 }

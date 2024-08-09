@@ -23,7 +23,7 @@ class StoreLogRequest extends FormRequest
     {
         return [
             'title' => 'nullable|string|max:64',
-            'status' => 'nullable|string|in:active,inactive',
+            'status' => 'nullable|integer',
         ];
     }
 }

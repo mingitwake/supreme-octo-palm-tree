@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('alias')->nullable();
             $table->string('url')->nullable();
             $table->string('file')->nullable();
-            $table->string('status')->nullable()->default('active');
+            $table->integer('status')->nullable()->default(1);
             $table->timestamps();
         });
     }

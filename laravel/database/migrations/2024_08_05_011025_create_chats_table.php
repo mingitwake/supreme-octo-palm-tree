@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('log_id')->index('log_id');
             $table->text('content')->nullable();
             $table->string('role')->nullable()->default('asst');
-            $table->string('status')->nullable()->default('active');
+            $table->integer('status')->nullable()->default(1);
             $table->timestamps();
         });
     }
