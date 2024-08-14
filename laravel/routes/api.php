@@ -2,38 +2,64 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
-})->middleware('auth:api');
+})->middleware('auth');
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
-Route::apiResource('chats', ChatController::class);
-
-use App\Http\Controllers\LogController;
-Route::apiResource('logs', LogController::class);
-
 use App\Http\Controllers\DocumentController;
-Route::apiResource('documents', DocumentController::class);
-
+use App\Http\Controllers\EmailController;
+use App\Http\Controllers\LogController;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
 use App\Models\Chat;
-Route::get('chat-nlatest', function (Request $request) {
-    $validated = $request->validate([
-        'log_id' => 'nullable|string|max:36',
-        'n' => 'nullable|integer',
-    ]);
-    $logId = $request->input('log_id');
-    $n = $request->input('n', 10);
-    $query = Chat::where('log_id', $logId);
-    return $query->latest()->take($n)->select('role', 'content', 'created_at')->get();
 
+// Route::post('register', function (RegisterRequest $request) {
+//     $user = User::create($request->validated());
+
+//     // $token = $user->createToken('authToken')->accessToken;
+
+//     return response()->json([
+//         'user' => $user,
+//         // 'access_token' => $token
+//     ], 201);
+// });
+// Route::post('login', function (LoginRequest $request) {
+//     if (Auth::attempt($request->validated())) {
+//         $user = Auth::user();
+//         $token = $user->createToken('authToken')->accessToken;
+
+//         return response()->json([
+//             'user' => $user,
+//             'access_token' => $token
+//         ], 200);
+//     } else {
+//         return response()->json([
+//             'error' => 'Unauthorized'
+//         ], 401);
+//     }
+// });
+
+Route::group(['middleware' => 'auth:api'], function () {
+    // Route::get('user', function (Request $request) {
+    //     return $request->user();
+    // });
+
+    // Route::post('logout', function (Request $request) {
+    //     $request->user()->token()->revoke();
+    //     return response()->json(['message' => 'Successfully logged out']);
+    // });
 });
 
-use App\Http\Controllers\EmailController;
-Route::post('send-email', [EmailController::class, 'sendEmail']);
-
-use Illuminate\Support\Facades\Cache;
-Route::middleware('api')->group(function () {
+Route::middleware(['api'])->group(function () {
+    Route::apiResource('chats', ChatController::class);
+    Route::apiResource('logs', LogController::class);
+    Route::apiResource('documents', DocumentController::class);
+    Route::post('send-email', [EmailController::class, 'sendEmail']);
 
     Route::post('/service/create', function () {
         try {
@@ -52,6 +78,7 @@ Route::middleware('api')->group(function () {
             $response = Http::put('http://localhost:5000/upload_url', request());
             if ($response->failed()) {
                 return response()->json(['error' => 'Failed to write to collection'], 500);
+                // return response()->json($response->body(), 500);
             }
             return $response->json();
         } catch (\Exception $e) {
@@ -81,7 +108,8 @@ Route::middleware('api')->group(function () {
 
             $response = Http::post('http://localhost:5000/chat', request());
             if ($response->failed()) {
-                return response()->json(['error' => 'Failed to chat'], 500);
+                // return response()->json(['error' => 'Failed to chat'], 500);
+                return response()->json($response->body(), 500);
             }
             Cache::set($cacheKey, $response->json(), now()->addMinutes(10));
             return $response->json();

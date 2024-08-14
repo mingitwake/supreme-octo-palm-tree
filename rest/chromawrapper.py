@@ -5,9 +5,8 @@ from langchain_chroma import Chroma
 from langchain_core.messages import SystemMessage
 from langchain_core.prompts import HumanMessagePromptTemplate, ChatPromptTemplate
 from chromadb.config import DEFAULT_TENANT, DEFAULT_DATABASE, Settings
-import json
 
-from dotenv import load_dotenv, dotenv_values 
+from dotenv import load_dotenv
 load_dotenv() 
 
 MODEL_DEPLOYMENT=os.getenv("MODEL_DEPLOYMENT")
@@ -35,7 +34,10 @@ EMBEDDING = AzureOpenAIEmbeddings(
 
 # Prompt Template
 PROMPT = ChatPromptTemplate.from_messages([
-    SystemMessage(content="You are Jenny, an administrative assistant at HKU. Provide concise and accurate responses. Only include information you are certain about."),
+    SystemMessage(content = 
+                  '''You are Jenny, an administrative assistant at the HKU Faculty of Engineering Admissions Office. 
+                  Your primary responsibility is to answer admission-related queries with concise, accurate, and source-backed responses when applicable. 
+                  Politely redirect any unrelated questions. Share only information you are certain about.'''),
     HumanMessagePromptTemplate.from_template("Query: {query}\n Histories: {histories}\n Source: {content}\n Answer: "),
 ])
 

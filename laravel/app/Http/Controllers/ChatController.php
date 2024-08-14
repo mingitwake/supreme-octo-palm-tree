@@ -53,11 +53,10 @@ class ChatController extends Controller
             $sortOrder = $request->input('sort_order', 'asc');
             $query->orderBy($sortBy, $sortOrder);
         } else {
-            $query->orderBy('created_at', 'desc');
+            $query->orderBy('created_at', 'asc');
         }
     
         return $query->paginate(10);
-        // return response()->json($chats, 200);
     }
 
     public function store(StoreChatRequest $request): JsonResponse

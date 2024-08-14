@@ -53,8 +53,6 @@ class DocumentController extends Controller
             $validated = $request->validated();
     
             if ($request->hasFile('file')) {
-                // $filePath = $request->file('file')->store('uploads', 'local');
-                // $filePath = Storage::disk('local')->put('uploads', $request->file('file'));
                 $filePath = $request->file('file')->storeAs(
                     'uploads', $request->file('file')->getClientOriginalName()
                 );

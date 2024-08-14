@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from chromawrapper import create, read, write, clean, show, delete
-from document_loader import read_urls, read_files
+from document_loader import read_url, read_file, read_file_url
 
 app = FastAPI()
 
@@ -66,21 +66,18 @@ async def create_collection(request: CreateRequest):
 
 @app.put("/upload_url")
 async def write_document(request: WriteUrlRequest):
-    try:
-        document_list = read_urls(urls=[request.url], ids=[request.id])
-        write(collection_name=request.collection, documents=document_list)
-        return {"message": f"Document #{request.id} Uploaded"}
-    except Exception:
-        raise HTTPException(status_code=500, detail="Error")
+    if request.url.endswith(".pdf"):
+        document_list = read_file_url(url=request.url, id=request.id)
+    else:
+        document_list = read_url(url=request.url, id=request.id)
+    write(collection_name=request.collection, documents=document_list)
+    return {"message": f"Document #{request.id} Uploaded"}
     
 @app.put("/upload_file")
 async def write_document(request: WriteFileRequest):
-    try:
-        document_list = read_files(files=[request.file], ids=[request.id])
-        write(collection_name=request.collection, documents=document_list)
-        return {"message": f"Document #{request.id} Uploaded"}
-    except Exception:
-        raise HTTPException(status_code=500, detail="Error")
+    document_list = read_file(filepath=request.file, id=request.id)
+    write(collection_name=request.collection, documents=document_list)
+    return {"message": f"Document #{request.id} Uploaded"}
 
 @app.delete("/clean")
 async def clean_collection(request: CleanRequest):

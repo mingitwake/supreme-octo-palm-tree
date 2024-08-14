@@ -2,6 +2,13 @@ import os
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.documentintelligence import DocumentIntelligenceClient
 from azure.ai.documentintelligence.models import AnalyzeResult, AnalyzeDocumentRequest
+from langchain_core.documents import Document
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+# Text Splitting
+def split(texts, chunk_size=1024, chunk_overlap=128):
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+    return text_splitter.split_documents(texts)
 
 def get_words(page, line):
     result = []
@@ -9,7 +16,6 @@ def get_words(page, line):
         if _in_span(word, line.spans):
             result.append(word)
     return result
-
 
 # To learn the detailed concept of "span" in the following codes, visit: https://aka.ms/spans 
 def _in_span(word, spans):
@@ -19,7 +25,7 @@ def _in_span(word, spans):
     return False
 
 
-def analyze_layout(path_to_sample_document):
+def analyze_layout(documentUrl):
     from azure.core.credentials import AzureKeyCredential
     from azure.ai.documentintelligence import DocumentIntelligenceClient
     from azure.ai.documentintelligence.models import AnalyzeResult, AnalyzeDocumentRequest
@@ -35,86 +41,44 @@ def analyze_layout(path_to_sample_document):
     # # Replace with your actual formUrl:
     # # If you use the URL of a public website, to find more URLs, please visit: https://aka.ms/more-URLs 
     # # If you analyze a document in Blob Storage, you need to generate Public SAS URL, please visit: https://aka.ms/create-sas-tokens
-    # poller = document_intelligence_client.begin_analyze_document(
-    #     "prebuilt-layout",
-    #     AnalyzeDocumentRequest(url_source=formUrl)
-    # )       
+    poller = document_intelligence_client.begin_analyze_document(
+        "prebuilt-layout",
+        AnalyzeDocumentRequest(url_source=documentUrl)
+    )       
     
     # If analyzing a local document, remove the comment markers (#) at the beginning of these 8 lines.
     # Delete or comment out the part of "Analyze a document at a URL" above.
     # Replace <path to your sample file>  with your actual file path.
     # path_to_sample_document = "<path to your sample file>"
-    with open(path_to_sample_document, "rb") as f:
-        poller = document_intelligence_client.begin_analyze_document(
-            "prebuilt-layout", analyze_request=f, content_type="application/octet-stream"
-        )
-    result: AnalyzeResult = poller.result()    
-    
-    # [START extract_layout]
-    # Analyze whether the document contains handwritten content.
-    if result.styles and any([style.is_handwritten for style in result.styles]):
-        print("Document contains handwritten content")
-    else:
-        print("Document does not contain handwritten content")
+    # with open(path_to_sample_document, "rb") as f:
+    #     poller = document_intelligence_client.begin_analyze_document(
+    #         "prebuilt-layout", analyze_request=f, content_type="application/octet-stream"
+    #     )
+    result: AnalyzeResult = poller.result()
+
+    pages = [""]
+    for page in result.pages: pages.append("")
 
     for paragraph_idx, paragraph in enumerate(result.paragraphs):
-        print(f"Paragraph #{paragraph_idx} content: {paragraph.content}, bounding regions: {paragraph.bounding_regions}")
-
-    # # Analyze pages.
-    # # To learn the detailed concept of "bounding polygon" in the following content, visit: https://aka.ms/bounding-region 
-    # for page in result.pages:
-        # print(f"----Analyzing layout from page #{page.page_number}----")
-        # print(f"Page has width: {page.width} and height: {page.height}, measured with unit: {page.unit}")
-
-        # # Analyze lines.
-        # if page.lines:
-        #     for line_idx, line in enumerate(page.lines):
-        #         words = get_words(page, line)
-        #         print(
-        #             f"...Line # {line_idx} has word count {len(words)} and text '{line.content}' "
-        #             f"within bounding polygon '{line.polygon}'"
-        #         )
-
-        #         # Analyze words.
-        #         for word in words:
-        #             print(f"......Word '{word.content}' has a confidence of {word.confidence}")
-
-        # # Analyze selection marks.
-        # if page.selection_marks:
-        #     for selection_mark in page.selection_marks:
-        #         print(
-        #             f"Selection mark is '{selection_mark.state}' within bounding polygon "
-        #             f"'{selection_mark.polygon}' and has a confidence of {selection_mark.confidence}"
-        #         )
-        # # Note that selection marks returned from begin_analyze_document(model_id="prebuilt-layout") do not return the text associated with the checkbox. 
-        # # For the API to return this information, build a custom model to analyze the checkbox and its text. For detailed steps, visit: https://aka.ms/train-your-custom-model
+        if paragraph.bounding_regions:
+            for region in paragraph.bounding_regions:
+                pages[region.page_number]+=(f"Paragraph #{paragraph_idx} content: {paragraph.content}, bounding regions: '{region.polygon}'")
                 
     # # Analyze tables.
     if result.tables:
         for table_idx, table in enumerate(result.tables):
-            print(f"Table #{table_idx} has {table.row_count} rows and {table.column_count} columns")
             if table.bounding_regions:
                 for region in table.bounding_regions:
-                    print(f"bounding regions: page {region.page_number}, polygon '{region.polygon}'")
-            # Analyze cells.
+                    pages[region.page_number]+=(f"Table #{table_idx} has {table.row_count} rows and {table.column_count} columns, bounding regions: '{region.polygon}'")
             for cell in table.cells:
-                print(f"..cell[{cell.row_index}][{cell.column_index}], text '{cell.content}'")
                 if cell.bounding_regions:
                     for region in cell.bounding_regions:
-                        print(f"..bounding regions: page {region.page_number}, polygon '{region.polygon}'")
-    # print(result.tables)
+                        pages[region.page_number]+=(f"..cell[{cell.row_index}][{cell.column_index}], text: '{cell.content}', bounding regions: '{region.polygon}'")
 
-    # # Analyze figures.
-    # # To learn the detailed concept of "figures" in the following content, visit: https://aka.ms/figures 
-    # if result.figures:                    
-    #     for figures_idx,figures in enumerate(result.figures):
-    #         print(f"Figure # {figures_idx} has the following spans:{figures.spans}")
-    #         for region in figures.bounding_regions:
-    #             print(f"Figure # {figures_idx} location on page:{region.page_number} is within bounding polygon '{region.polygon}'")                    
-
-    # print("----------------------------------------")
-    # # [END extract_layout]
-
+    documents = []
+    for page_idx, page in enumerate(pages):
+        documents.extend(split([Document(page_content=page, metadata={"source": documentUrl, "page": page_idx})]))
+    return documents
 
 if __name__ == "__main__":
     from azure.core.exceptions import HttpResponseError
@@ -122,7 +86,7 @@ if __name__ == "__main__":
 
     # try:
     load_dotenv(find_dotenv())
-    analyze_layout("rest\FAQ_2024-25_vff.pdf")
+    print(analyze_layout("https://engg.hku.hk/Portals/0/TPG/FAQ_2024-25_vff.pdf"))
     # except HttpResponseError as error:
     #     # Examples of how to check an HttpResponseError
     #     # Check by error code:
