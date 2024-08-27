@@ -23,28 +23,30 @@ class DocumentController extends Controller
 {
     public function index(Request $request)//: JsonResponse
     {
-        // $documents = Document::all(); // You can change this to paginate in the future
         $query = Document::query();
 
         $validated = $request->validate([
-            'search' => 'nullable|string|max:255',
-            'status' => 'nullable|integer',
-            'sort_by' => 'nullable|string|in:asc,desc',
+            'search_by' => 'nullable|string',
+            'search_value' => 'nullable|string',
+            'sort_by' => 'nullable|string',
+            'sort_order' => 'nullable|string|in:asc,desc',
         ]);
     
-        if ($search = $request->input('search')) {
-            $query->where('alias', 'LIKE', '%' . $search . '%');
+        if ($request->search_by && $request->search_value) {
+            $searchBy = $request->search_by;
+            $searchValue = $request->search_value;
+            $query->where($searchBy, 'LIKE', '%' . $searchValue . '%');
         }
         
-        if ($sortBy = $request->input('sort_by')) {
-            $sortOrder = $request->input('sort_order', 'asc');
+        if ($request->sort_by && $request->sort_order) {
+            $sortBy = $request->sort_by;
+            $sortOrder = $request->sort_order;
             $query->orderBy($sortBy, $sortOrder);
         } else {
             $query->orderBy('created_at', 'desc');
         }
     
         return $query->paginate(10);
-        // return response()->json($documents, 200);
     }
 
     public function store(StoreDocumentRequest $request): JsonResponse
@@ -58,13 +60,13 @@ class DocumentController extends Controller
                 );
                 $validated['file'] = $filePath;
                 $document = Document::create($validated);
-                return response()->json(["id" => $document->id, "file" => $document->file, "created_at" => $document->created_at], 202);
+                return response()->json($document, 202);
             }
 
             if ($request->has('url')) {
                 $url = $request->input('url');
                 $document = Document::create($validated);
-                return response()->json(["id" => $document->id, "url" =>$document->url, "created_at" => $document->created_at], 202);
+                return response()->json($document, 202);
             }
         } catch (ValidationException $e) {
             return response()->json([

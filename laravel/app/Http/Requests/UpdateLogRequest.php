@@ -23,7 +23,6 @@ class UpdateLogRequest extends FormRequest
     {
         return [
             'title' => 'nullable|string|max:64',
-            'status' => 'nullable|integer', 
         ];
     }
 }

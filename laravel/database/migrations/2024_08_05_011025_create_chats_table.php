@@ -15,9 +15,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('log_id')->index('log_id');
             $table->text('content')->nullable();
-            $table->string('role')->nullable()->default('asst');
-            $table->integer('status')->nullable()->default(1);
+            $table->enum('role', ['user', 'asst', 'admin'])->nullable()->default('user');
+            $table->enum('class', ['MScFees', 'MScCourses', 'GeneralInformation', 'MScApplication', 'MScEntranceRequirement', 'StudentSupport', 'Visa', 'Others'])->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

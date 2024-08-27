@@ -21,39 +21,27 @@ class ChatController extends Controller
 {
     public function index(Request $request)//: JsonResponse
     {
-        // $chats = Chat::all(); // You can change this to paginate in the future
-
-        $validated = $request->validate([
-            'search' => 'nullable|string|max:255',
-            'log_id' => 'nullable|string|max:36',
-            'role' => 'nullable|string|in:user,asst,admin',
-            'status' => 'nullable|integer',
-            'sort_by' => 'nullable|string|in:asc,desc',
-        ]);
-
         $query = Chat::query();
-
-        if ($search = $request->input('search')) {
-            $query->where('content', 'LIKE', '%' . $search . '%');
-        }
+        
+        $validated = $request->validate([
+            'search_by' => 'nullable|string',
+            'search_value' => 'nullable|string',
+            'sort_by' => 'nullable|string',
+            'sort_order' => 'nullable|string|in:asc,desc',
+        ]);
     
-        if ($logId = $request->input('log_id')) {
-            $query->where('log_id', $logId);
+        if ($request->search_by && $request->search_value) {
+            $searchBy = $request->search_by;
+            $searchValue = $request->search_value;
+            $query->where($searchBy, 'LIKE', '%' . $searchValue . '%');
         }
         
-        if ($role = $request->input('role')) {
-            $query->where('role', $role);
-        }
-    
-        if ($status = $request->input('status')) {
-            $query->where('status', $status);
-        }
-    
-        if ($sortBy = $request->input('sort_by')) {
-            $sortOrder = $request->input('sort_order', 'asc');
+        if ($request->sort_by && $request->sort_order) {
+            $sortBy = $request->sort_by;
+            $sortOrder = $request->sort_order;
             $query->orderBy($sortBy, $sortOrder);
         } else {
-            $query->orderBy('created_at', 'asc');
+            $query->orderBy('created_at', 'desc');
         }
     
         return $query->paginate(10);
@@ -63,7 +51,7 @@ class ChatController extends Controller
     {
         try {
             $chat = Chat::create($request->validated());
-            return response()->json(["id" => $chat->id, "created_at" => $chat->created_at], 201);
+            return response()->json($chat, 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation error',

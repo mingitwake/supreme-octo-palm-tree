@@ -23,9 +23,8 @@ class UpdateChatRequest extends FormRequest
     {
         return [
             'log_id'=> 'nullable|string|max:36',
-            'content' => 'nullable|string|max:2000',
+            'content' => 'nullable|string|max:500',
             'role' => 'nullable|string|in:user,admin,asst',
-            'status' => 'nullable|integer',
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateLogRequest;
 use App\Models\Log;
 use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 
@@ -18,17 +19,39 @@ use Illuminate\Validation\ValidationException;
 
 class LogController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request)//: JsonResponse
     {
-        $logs = Log::all(); // You can change this to paginate in the future
-        return response()->json($logs, 200);
+        $query = Log::query();
+
+        $validated = $request->validate([
+            'search_by' => 'nullable|string',
+            'search_value' => 'nullable|string',
+            'sort_by' => 'nullable|string',
+            'sort_order' => 'nullable|string|in:asc,desc',
+        ]);
+    
+        if ($request->search_by && $request->search_value) {
+            $searchBy = $request->search_by;
+            $searchValue = $request->search_value;
+            $query->where($searchBy, 'LIKE', '%' . $searchValue . '%');
+        }
+        
+        if ($request->sort_by && $request->sort_order) {
+            $sortBy = $request->sort_by;
+            $sortOrder = $request->sort_order;
+            $query->orderBy($sortBy, $sortOrder);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+    
+        return $query->paginate(10);
     }
 
     public function store(StoreLogRequest $request): JsonResponse
     {
         try {
             $log = Log::create($request->validated());
-            return response()->json(["id" => $log->id, "created_at" => $log->created_at], 201);
+            return response()->json($log, 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation error',
@@ -50,7 +73,12 @@ class LogController extends Controller
     public function show($id): JsonResponse
     {
         try {
-            $log = Log::findOrFail($id);
+            $log = Log::with(['chats'])->withTrashed()->findOrFail($id);
+            if ($log->trashed()) {
+                return response()->json([
+                    'message' => 'Log Deleted',
+                ], 404);
+            }
             return response()->json($log, 200);
         } catch (Exception $e) {
             return response()->json([

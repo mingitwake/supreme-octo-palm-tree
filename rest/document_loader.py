@@ -1,4 +1,4 @@
-import requests, os
+import requests, os, urllib3
 from bs4 import BeautifulSoup 
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -11,6 +11,8 @@ def split(texts, chunk_size=1024, chunk_overlap=128):
 # Reading URL and Processing Content
 def read_url(url, id):
     documents = []
+    # http = urllib3.PoolManager(cert_reqs='CERT_NONE')
+    # response = http.request('GET', url)
     response = requests.get(url)
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'html.parser')
