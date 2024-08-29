@@ -156,13 +156,13 @@ if path misconfiguration occurs, the quick way is to create a laravel project an
 > ``PASSPORT_PUBLIC_KEY=your-public-key``
 
 #### Nginx As Reverse Proxy on WSL
-wsl -d Ubuntu-22.04
-https://saaslit.com/blog/laravel/how-to-install-laravel-11-on-linux
-https://www.how2shout.com/how-to/install-nginx-php-mysql-wsl-windows-10.html
-https://www.baeldung.com/linux/nginx-cross-origin-policy-headers
-https://laravel.com/docs/11.x/deployment#server-configuration
+> ``wsl -d Ubuntu-22.04``
+- https://saaslit.com/blog/laravel/how-to-install-laravel-11-on-linux
+- https://www.how2shout.com/how-to/install-nginx-php-mysql-wsl-windows-10.html
+- https://www.baeldung.com/linux/nginx-cross-origin-policy-headers
+- https://laravel.com/docs/11.x/deployment#server-configuration
 
-note* leave server name as wildcard _
-For Windows servers, firewall configuration might be required.
-
+note* leave server name as wildcard _</br>
+For Windows servers, firewall configuration might be required.</br>
+</br>
 Get the server ip address with ipconfig (Windows) or ifconfig (Linux)
