@@ -107,30 +107,53 @@ if path misconfiguration occurs, the quick way is to create a laravel project an
 > ``php artisan migrate``
 
 #### Modify .env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=your-dbname
-DB_USERNAME=your-username
-DB_PASSWORD=your-password
-CACHE_STORE=redis
-CACHE_PREFIX=
-REDIS_CLIENT=phpredis
-REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=null
-REDIS_PORT=6379
-MAIL_MAILER=postmark
-MAIL_HOST=127.0.0.1
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-MAIL_FROM_ADDRESS=your_address
-MAIL_FROM_NAME="EstherITWake"
-POSTMARK_MESSAGE_STREAM_ID=your-stream
-POSTMARK_TOKEN=your-token
-PASSPORT_PRIVATE_KEY=your-private-key
-PASSPORT_PUBLIC_KEY=your-public-key
+> ``DB_CONNECTION=mysql``
+>
+> ``DB_HOST=127.0.0.1``
+>
+> ``DB_PORT=3306``
+>
+> ``DB_DATABASE=your-dbname``
+>
+> ``DB_USERNAME=your-username``
+>
+> ``DB_PASSWORD=your-password``
+>
+> ``CACHE_STORE=redis``
+>
+> ``CACHE_PREFIX=``
+>
+> ``REDIS_CLIENT=phpredis``
+>
+> ``REDIS_HOST=127.0.0.1``
+>
+> ``REDIS_PASSWORD=null``
+>
+> ``REDIS_PORT=6379``
+>
+> ``MAIL_MAILER=your-mailer``
+>
+> ``MAIL_HOST=127.0.0.1``
+>
+> ``MAIL_PORT=2525``
+>
+> ``MAIL_USERNAME=null``
+>
+> ``MAIL_PASSWORD=null``
+>
+> ``MAIL_ENCRYPTION=null``
+>
+> ``MAIL_FROM_ADDRESS=your_address``
+>
+> ``MAIL_FROM_NAME="EstherITWake"``
+>
+> ``POSTMARK_MESSAGE_STREAM_ID=your-stream``
+>
+> ``POSTMARK_TOKEN=your-token``
+>
+> ``PASSPORT_PRIVATE_KEY=your-private-key``
+>
+> ``PASSPORT_PUBLIC_KEY=your-public-key``
 
 #### Nginx As Reverse Proxy on WSL
 wsl -d Ubuntu-22.04
