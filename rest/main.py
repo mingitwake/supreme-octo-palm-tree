@@ -33,7 +33,7 @@ class WriteFileRequest(BaseModel):
     id: str
     collection: str
 
-class DeleteRequest(BaseModel):
+class DeleteFileRequest(BaseModel):
     id: str
     collection: str
 
@@ -96,7 +96,7 @@ async def show_documents(request: ShowRequest):
         raise HTTPException(status_code=500, detail="Error")
     
 @app.delete("/delete")
-async def delete_document(request: DeleteRequest):
+async def delete_document(request: DeleteFileRequest):
     try:
         delete(collection_name=request.collection,id=request.id)
         return {"message": "OK"}

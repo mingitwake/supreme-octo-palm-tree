@@ -40,14 +40,13 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::middleware(['api'])->group(function () {
     Route::apiResource('chats', ChatController::class);
     Route::apiResource('logs', LogController::class);
-    Route::apiResource('documents', DocumentController::class);
+    // Route::apiResource('documents', DocumentController::class);
+    Route::get('documents', [DocumentController::class, 'index']);
+    Route::post('documents', [DocumentController::class, 'store']);
+    Route::post('documents/{id}', [DocumentController::class, 'update']);
     Route::post('send-email', [EmailController::class, 'sendEmail']);
     Route::apiResource('forms', FormController::class);
     Route::apiResource('questions', QuestionController::class);
-    Route::apiResource('textconstraints', TextConstraintController::class);
-    Route::apiResource('numberconstraints', NumberConstraintController::class);
-    Route::apiResource('tableconstraints', TableConstraintController::class);
-    Route::apiResource('checkboxconstraints', CheckboxConstraintController::class);
     Route::apiResource('checkboxoptions', CheckboxOptionController::class);
     Route::apiResource('responses', ResponseController::class);
     Route::apiResource('answers', AnswerController::class);
